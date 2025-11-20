@@ -10,3 +10,4 @@ use App\Http\Controllers\Api\EmployeesController;
 // })->middleware('auth:sanctum');
 
 Route::get('/employees', [EmployeesController::class, 'index']);
+Route::get('/employees/{id}', [EmployeesController::class, 'show']);
