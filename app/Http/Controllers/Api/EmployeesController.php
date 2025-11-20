@@ -25,13 +25,12 @@ class EmployeesController extends Controller
                 ->orWhere('position', 'LIKE', "%{$filterByKeyword}%")
                 ->orWhere('salary', $filterByKeyword);
             });
-        } else {
-            $query->get();
         }
+            
+        $employees = $query->get();
 
-        $employees = $query->paginate(10);
-        
-        if ($employees) {
+        if ($employees->isEmpty() == false) {
+            $employees = $query->paginate(10);
             return response()->json([
                 'success' => true,
                 'message' => "Data pegawai ditemukan",
@@ -50,6 +49,24 @@ class EmployeesController extends Controller
                 'message' => "Data pegawai tidak ditemukan"
             ], 404);
         }
+        
+    }
+
+    public function show(string $id)
+    {   
+        try {
+            $employee = Employees::findorFail($id);
+            return response()->json([
+                'success' => true,
+                'message' => "Data pegawai ditemukan",
+                'data' => $employee
+            ], 200);
+         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return response()->json([
+                'success' => false,
+                'message' => "Data pegawai tidak ditemukan"
+            ], 404);
+         }
         
     }
 }
