@@ -1,75 +1,118 @@
-# Laravel 12 Project Setup Guide
+# Employees API Documentation
 
-## Requirements
+## Base URL
 
--   PHP \>= 8.2
--   Composer
--   MySQL or other supported database
--   Node.js & NPM (optional, for frontend assets)
+`/api/employees`
 
-## Installation Steps
+------------------------------------------------------------------------
 
-1.  **Clone the repository**
+## Endpoints
 
-    ``` bash
-    git clone <repository-url>
-    cd <project-folder>
-    ```
+### 1. Get All Employees (Paginated)
 
-2.  **Install PHP dependencies**
+**GET** `/api/employees`
 
-    ``` bash
+**Query Parameters** \| Name \| Type \| Description \|
+\|------\|------\|-------------\| \| `page` \| integer \| Page number \|
+\| `status` \| string \| Filter by status (`active`, `inactive`) \| \|
+`keyword` \| string \| Search by name, email, position, or salary \|
+
+**Response (200)**
+
+``` json
+{
+  "data": [...],
+  "current_page": 1,
+  "last_page": 5,
+  "total": 100
+}
+```
+
+**Response (404)**
+
+``` json
+{
+  "message": "No employees found"
+}
+```
+
+------------------------------------------------------------------------
+
+### 2. Get Employee by ID
+
+**GET** `/api/employees/{id}`
+
+**Response (200)** Employee data
+
+**Response (404)**
+
+``` json
+{
+  "message": "Employee not found"
+}
+```
+
+------------------------------------------------------------------------
+
+### 3. Create Employee
+
+**POST** `/api/employees`
+
+**Validation Rules** - `name`: required, string, max:100\
+- `email`: required, email, unique\
+- `position`: required, string\
+- `salary`: required, integer, min:2000000, max:50000000\
+- `status`: required, in:`active`,`inactive`\
+- `hired_at`: nullable, date
+
+**Response (201)** Employee created
+
+**Response (422)** Validation error
+
+------------------------------------------------------------------------
+
+### 4. Update Employee
+
+**PUT/PATCH** `/api/employees/{id}`
+
+**Email unique rule** `unique:employees,email,{id}` → Email valid jika
+email milik pegawai itu sendiri
+
+------------------------------------------------------------------------
+
+### 5. Soft Delete Employee
+
+**DELETE** `/api/employees/{id}`
+
+Menggunakan `SoftDeletes` pada model.
+
+**Response (200)**
+
+``` json
+{ "message": "Employee deleted" }
+```
+
+------------------------------------------------------------------------
+
+## Error Handling
+
+-   `ModelNotFoundException` → 404\
+-   Validation errors → 422\
+-   Query results empty → custom 404
+
+------------------------------------------------------------------------
+
+## Setup After Cloning Repo
+
     composer install
-    ```
-
-3.  **Copy environment file**
-
-    ``` bash
     cp .env.example .env
-    ```
-
-    Then update database settings in `.env`.
-
-4.  **Generate application key**
-
-    ``` bash
     php artisan key:generate
-    ```
-
-5.  **Run migrations (and seed if needed)**
-
-    ``` bash
-    php artisan migrate --seed
-    ```
-
-6.  **Install frontend dependencies (optional)**
-
-    ``` bash
-    npm install
-    npm run build
-    ```
-
-7.  **Run the local development server**
-
-    ``` bash
+    php artisan migrate
     php artisan serve
-    ```
 
-## Additional Commands
-
--   Clear caches:
-
-    ``` bash
-    php artisan optimize:clear
-    ```
-
--   Storage link:
-
-    ``` bash
-    php artisan storage:link
-    ```
+------------------------------------------------------------------------
 
 ## Notes
 
-Ensure your `.env` file is configured properly before running migration
-or starting the server.
+-   Supports filtering, keyword search, pagination\
+-   Results return 404 jika data tidak ditemukan
