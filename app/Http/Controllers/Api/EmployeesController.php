@@ -55,7 +55,7 @@ class EmployeesController extends Controller
     public function show(string $id)
     {   
         try {
-            $employee = Employees::findorFail($id);
+            $employee = Employees::findOrFail($id);
             return response()->json([
                 'success' => true,
                 'message' => "Data pegawai ditemukan",
