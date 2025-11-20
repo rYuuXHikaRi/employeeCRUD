@@ -1,106 +1,4 @@
-# Employees API Documentation
-
-## Base URL
-
-`/api/employees`
-
-------------------------------------------------------------------------
-
-## Endpoints
-
-### 1. Get All Employees (Paginated)
-
-**GET** `/api/employees`
-
-**Query Parameters** \| Name \| Type \| Description \|
-\|------\|------\|-------------\| \| `page` \| integer \| Page number \|
-\| `status` \| string \| Filter by status (`active`, `inactive`) \| \|
-`keyword` \| string \| Search by name, email, position, or salary \|
-
-**Response (200)**
-
-``` json
-{
-  "data": [...],
-  "current_page": 1,
-  "last_page": 5,
-  "total": 100
-}
-```
-
-**Response (404)**
-
-``` json
-{
-  "message": "No employees found"
-}
-```
-
-------------------------------------------------------------------------
-
-### 2. Get Employee by ID
-
-**GET** `/api/employees/{id}`
-
-**Response (200)** Employee data
-
-**Response (404)**
-
-``` json
-{
-  "message": "Employee not found"
-}
-```
-
-------------------------------------------------------------------------
-
-### 3. Create Employee
-
-**POST** `/api/employees`
-
-**Validation Rules** - `name`: required, string, max:100\
-- `email`: required, email, unique\
-- `position`: required, string\
-- `salary`: required, integer, min:2000000, max:50000000\
-- `status`: required, in:`active`,`inactive`\
-- `hired_at`: nullable, date
-
-**Response (201)** Employee created
-
-**Response (422)** Validation error
-
-------------------------------------------------------------------------
-
-### 4. Update Employee
-
-**PUT/PATCH** `/api/employees/{id}`
-
-**Email unique rule** `unique:employees,email,{id}` → Email valid jika
-email milik pegawai itu sendiri
-
-------------------------------------------------------------------------
-
-### 5. Soft Delete Employee
-
-**DELETE** `/api/employees/{id}`
-
-Menggunakan `SoftDeletes` pada model.
-
-**Response (200)**
-
-``` json
-{ "message": "Employee deleted" }
-```
-
-------------------------------------------------------------------------
-
-## Error Handling
-
--   `ModelNotFoundException` → 404\
--   Validation errors → 422\
--   Query results empty → custom 404
-
-------------------------------------------------------------------------
+# Employees CRUD API Documentation
 
 ## Setup After Cloning Repo
 
@@ -112,7 +10,171 @@ Menggunakan `SoftDeletes` pada model.
 
 ------------------------------------------------------------------------
 
-## Notes
+## Endpoints
 
--   Supports filtering, keyword search, pagination\
--   Results return 404 jika data tidak ditemukan
+### 1. Ambil semua data employee
+
+**GET** `/api/employees`
+
+**Query Parameters** - `page`: page number\
+- `status`: 'active' or 'inactive'\
+- `search`: string\
+
+**Response (200)**
+``` json
+{
+    "success": true,
+    "message": "Data pegawai ditemukan",
+    "current_page": 3,
+    "total_pages": 3,
+    "total_items": 27,
+    "data" : [...],
+    "links": {
+        "next_page_url": null,
+        "prev_page_url": "http://localhost:8080/api/employees?page=2"
+    }
+}
+```
+
+**Response (404)**
+
+``` json
+{
+    "succes" : false,
+    "message" : "Data pegawai tidak ditemukan"
+}
+```
+
+------------------------------------------------------------------------
+
+### 2. Ambil data pegawai berdasarkan id
+
+**GET** `/api/employees/{id}`
+
+**Response (200)** 
+
+``` json
+
+{
+    "success": true,
+    "message": "Data pegawai ditemukan",
+    "data" : [....]
+}
+
+```
+
+**Response (404)**
+
+``` json
+{
+    "success" : false,
+    "message" : "Data pegawai tidak ditemukan"
+}
+```
+
+------------------------------------------------------------------------
+
+### 3. Menambahkan data Employee
+
+**POST** `/api/employees`
+
+**Validation Rules** - `name`: required, string, max:100\
+- `email`: required, email, unique\
+- `position`: required, string\
+- `salary`: required, integer, min:2000000, max:50000000\
+- `status`: required, in:`active`,`inactive`\
+- `hired_at`: nullable, date
+
+**Response (201)**
+``` json
+
+{
+    "success": true,
+    "message": "Data pegawai berhasil ditambahkan",
+    "data" : [....]
+}
+
+```
+
+**Response (422)**
+``` json
+
+{
+    "success": false,
+    "message": "Validasi gagal",
+    "details": {...}
+}
+
+```
+
+------------------------------------------------------------------------
+
+### 4. Update data pegawai
+
+**PUT** `/api/employees/{id}`
+
+on POSTMAN :
+**POST** `/api/employees/{id}?_method=PUT` 
+
+**Validation Rules** - `name`: required, string, max:100\
+- `email`: required, email, unique -> valid jika email pegawai itu sendiri\
+- `position`: required, string\
+- `salary`: required, integer, min:2000000, max:50000000\
+- `status`: required, in:`active`,`inactive`\
+- `hired_at`: nullable, date
+
+**Response (200)**
+``` json
+
+{
+    "success": true,
+    "message": "Data pegawai berhasil diupdate",
+    "data": {....}
+}
+
+```
+
+**Response (404)**
+``` json
+
+{
+    "success": false,
+    "message": "Data pegawai tidak ditemukan"
+}
+
+```
+
+**Response (422)**
+``` json
+
+{
+    "success": false,
+    "message": "Validasi gagal",
+    "details": {...}
+}
+
+```
+------------------------------------------------------------------------
+
+### 5. Hapus data pegawai
+
+**DELETE** `/api/employees/{id}`
+
+**Response (200)**
+
+``` json
+    "success": true,
+    "message": "Data pegawai berhasil dihapus"
+```
+
+**Response (404)**
+``` json
+
+{
+    "success": false,
+    "message": "Data pegawai tidak ditemukan"
+}
+
+```
+
+------------------------------------------------------------------------
