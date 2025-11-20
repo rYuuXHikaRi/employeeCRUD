@@ -11,3 +11,5 @@ use App\Http\Controllers\Api\EmployeesController;
 
 Route::get('/employees', [EmployeesController::class, 'index']);
 Route::get('/employees/{id}', [EmployeesController::class, 'show']);
+Route::post('/employees', [EmployeesController::class, 'store']);
+Route::put('/employees/{id}', [EmployeesController::class, 'update']);

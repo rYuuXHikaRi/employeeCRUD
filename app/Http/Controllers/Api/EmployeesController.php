@@ -69,4 +69,83 @@ class EmployeesController extends Controller
          }
         
     }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|unique:employees,email',
+            'position' => 'required|string',
+            'salary' => 'required|integer|min:2000000|max:50000000',
+            'status' => 'required|string|in:active,inactive',
+            'hired_at' => 'nullable|date',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal',
+                'details' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $employee = Employees::create($request->all());
+            return response()->json([
+                'success' => true,
+                'message' => 'Data pegawai berhasil ditambahkan',
+                'data' => $employee
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan data pegawai',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+
+    }
+
+    public function update(Request $request, string $id) {
+        try {
+            $employee = Employees::findOrFail($id);
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:100',
+                'email' => 'required|email|unique:employees,email' . $id,
+                'position' => 'required|string',
+                'salary' => 'required|integer|min:2000000|max:50000000',
+                'status' => 'required|string|in:active,inactive',
+                'hired_at' => 'nullable|date',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal',
+                    'details' => $validator->errors()
+                ], 422);
+            }
+
+            $employee->update($request->all());
+            return response()->json([
+                'success' => true,
+                'message' => 'Data pegawai berhasil diupdate',
+                'data' => $employee
+            ], 200);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return response()->json([
+                'success' => false,
+                'message' => "Data pegawai tidak ditemukan"
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan data pegawai',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
 }
