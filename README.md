@@ -16,7 +16,8 @@
 
 **GET** `/api/employees`
 
-**Query Parameters** - `page`: page number\
+**Query Parameters** 
+- `page`: page number\
 - `status`: 'active' or 'inactive'\
 - `search`: string\
 
