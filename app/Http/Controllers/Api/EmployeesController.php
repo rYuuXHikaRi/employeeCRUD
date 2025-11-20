@@ -147,5 +147,22 @@ class EmployeesController extends Controller
         }
     }
 
+    public function destroy(string $id) {
+        try {
+            $employee = Employees::findOrFail($id);
+            $employee->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => "Data pegawai berhasil dihapus",
+            ], 200);
+         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return response()->json([
+                'success' => false,
+                'message' => "Data pegawai tidak ditemukan"
+            ], 404);
+         }
+    }
+
 
 }
