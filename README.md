@@ -79,7 +79,8 @@
 
 **POST** `/api/employees`
 
-**Validation Rules** - `name`: required, string, max:100
+**Validation Rules** 
+- `name`: required, string, max:100
 - `email`: required, email, unique
 - `position`: required, string
 - `salary`: required, integer, min:2000000, max:50000000
@@ -117,7 +118,8 @@
 on POSTMAN :
 **POST** `/api/employees/{id}?_method=PUT` 
 
-**Validation Rules** - `name`: required, string, max:100
+**Validation Rules** 
+- `name`: required, string, max:100
 - `email`: required, email, unique -> valid jika email pegawai itu sendiri
 - `position`: required, string
 - `salary`: required, integer, min:2000000, max:50000000
