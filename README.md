@@ -17,9 +17,9 @@
 **GET** `/api/employees`
 
 **Query Parameters** 
-- `page`: page number\
-- `status`: 'active' or 'inactive'\
-- `search`: string\
+- `page`: page number
+- `status`: 'active' or 'inactive'
+- `search`: string
 
 **Response (200)**
 ``` json
@@ -79,11 +79,11 @@
 
 **POST** `/api/employees`
 
-**Validation Rules** - `name`: required, string, max:100\
-- `email`: required, email, unique\
-- `position`: required, string\
-- `salary`: required, integer, min:2000000, max:50000000\
-- `status`: required, in:`active`,`inactive`\
+**Validation Rules** - `name`: required, string, max:100
+- `email`: required, email, unique
+- `position`: required, string
+- `salary`: required, integer, min:2000000, max:50000000
+- `status`: required, in:`active`,`inactive`
 - `hired_at`: nullable, date
 
 **Response (201)**
@@ -117,11 +117,11 @@
 on POSTMAN :
 **POST** `/api/employees/{id}?_method=PUT` 
 
-**Validation Rules** - `name`: required, string, max:100\
-- `email`: required, email, unique -> valid jika email pegawai itu sendiri\
-- `position`: required, string\
-- `salary`: required, integer, min:2000000, max:50000000\
-- `status`: required, in:`active`,`inactive`\
+**Validation Rules** - `name`: required, string, max:100
+- `email`: required, email, unique -> valid jika email pegawai itu sendiri
+- `position`: required, string
+- `salary`: required, integer, min:2000000, max:50000000
+- `status`: required, in:`active`,`inactive`
 - `hired_at`: nullable, date
 
 **Response (200)**
