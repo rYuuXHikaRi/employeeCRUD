@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('salary');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->date('hired_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
